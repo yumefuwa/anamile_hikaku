@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // 通常マイル vs 現金
+  // マイル vs 現金 比較
   document.getElementById("compareBtn").addEventListener("click", function () {
     const miles = parseInt(document.getElementById("miles").value);
     const yenPerMile = parseFloat(document.getElementById("yenPerMile").value);
@@ -11,12 +11,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const mileValue = Math.round(miles * yenPerMile);
-    let message = `マイル価値：${mileValue}円相当\n現金：${cashFare}円\n`;
+    let diff = mileValue - cashFare;
+    let message = `マイル価値：${mileValue}円相当\n現金運賃：${cashFare}円\n`;
 
-    if (mileValue > cashFare) {
-      message += "👉 マイルの方が価値が高くてお得！";
-    } else if (mileValue < cashFare) {
-      message += "👉 現金で払う方が安いです。";
+    if (diff > 0) {
+      message += `👉 マイルの方が ${diff.toLocaleString()} 円分お得！`;
+    } else if (diff < 0) {
+      message += `👉 現金で払う方が ${Math.abs(diff).toLocaleString()} 円安いです。`;
     } else {
       message += "👉 同じくらいの価値です。";
     }
@@ -24,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("result").innerText = message;
   });
 
-  // いっしょにマイル割り
+  // いっしょにマイル割 比較
   document.getElementById("togetherCompareBtn").addEventListener("click", function () {
     const yenPerMile = parseFloat(document.getElementById("togetherYenPerMile").value);
     const companionFare = parseInt(document.getElementById("companionFare").value);
@@ -35,16 +36,17 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    const mileValue = Math.round(10000 * yenPerMile); // 10,000マイル固定
+    const mileValue = Math.round(10000 * yenPerMile);
     const totalValue = mileValue + companionFare;
+    const diff = normalFare - totalValue;
 
     let message = `いっしょにマイル割り：${mileValue}円（マイル価値）＋${companionFare}円 = ${totalValue}円相当\n`;
     message += `通常運賃（2人分）：${normalFare}円\n\n`;
 
-    if (totalValue < normalFare) {
-      message += "👉 いっしょにマイル割りの方がお得です！";
-    } else if (totalValue > normalFare) {
-      message += "👉 通常運賃の方が安いです。";
+    if (diff > 0) {
+      message += `👉 いっしょにマイル割りで ${diff.toLocaleString()} 円お得！`;
+    } else if (diff < 0) {
+      message += `👉 通常運賃の方が ${Math.abs(diff).toLocaleString()} 円安いです。`;
     } else {
       message += "👉 どちらも同じくらいの金額です。";
     }
